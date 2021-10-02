@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -12,6 +15,7 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,7 +53,7 @@ dependencies {
 
     def nav_version = "2.3.5"
 
-    // Kotlin
+    // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
@@ -58,4 +62,19 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    // rxandroid
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
 }
