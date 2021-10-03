@@ -1,14 +1,19 @@
 package com.example.rentateamtest
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.rentateamtest.pojo.User
 import com.example.rentateamtest.repository.UsersRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 
 //@HiltViewModel
+@SuppressLint("CheckResult")
 class DetailViewModel @AssistedInject constructor (
     @Assisted savedStateHandle: SavedStateHandle,
     @Assisted private val userId: String,
@@ -19,13 +24,9 @@ class DetailViewModel @AssistedInject constructor (
         fun create(handle: SavedStateHandle, userId: String): DetailViewModel
     }
 
-    private val _user=MutableLiveData<User>()
-    val user : LiveData<User> = _user
+    /*private val _user=MutableLiveData<User>()
+    val user : LiveData<User> = _user*/
 
-    init {
-        viewModelScope.launch {
-            _user.value=usersRepository.getUser(userId)
-        }
-    }
+    val user=usersRepository.getUser(userId)
 }
 

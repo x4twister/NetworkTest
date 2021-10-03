@@ -3,7 +3,7 @@ package com.example.rentateamtest.http
 import com.example.rentateamtest.pojo.User
 import com.google.gson.annotations.SerializedName
 
-data class Result (
+data class UsersResult (
     @SerializedName("page")
     val page: Long,
     @SerializedName("per_page")

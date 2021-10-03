@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
     id 'kotlin-android-extensions'
 }
 
@@ -63,7 +63,7 @@ dependencies {
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
-    // Multidex
+    // MultiDex
     implementation 'com.android.support:multidex:1.0.3'
 
     // retrofit
@@ -71,10 +71,17 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
-    // rxandroid
+    // rxAndroid
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
-    //Hilt
+    // Hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+
+    // Room
+    def room_version = "2.3.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-rxjava2:$room_version")
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }
