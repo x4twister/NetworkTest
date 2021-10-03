@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.rentateamtest.helpers.ViewModelFactory
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,10 +18,6 @@ import kotlinx.android.synthetic.main.detail_fragment.*
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = DetailFragment()
-    }
 
     @Inject
     lateinit var detailViewModelFactory: DetailViewModel.DetailViewModelFactory
@@ -57,7 +54,12 @@ class DetailFragment : Fragment() {
                 Log.d("Result", "$result")
                 firstNameView.text=result.firstName
                 lastNameView.text=result.lastName
-                emailView.text=result.id.toString()
+                emailView.text=result.email
+
+                Picasso.get()
+                    .load(result.avatar)
+                    .fit()
+                    .into(avatarView)
             }, { error ->
                 Log.d("Result", "FAIL!")
                 error.printStackTrace()

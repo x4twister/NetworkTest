@@ -25,11 +25,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //return inflater.inflate(R.layout.list_fragment, container, false)
+
         val binding: HomeFragmentBinding = DataBindingUtil
             .inflate(inflater, R.layout.home_fragment,container,false)
-
         binding.viewModel=viewModel
-
         return binding.root
     }
 }

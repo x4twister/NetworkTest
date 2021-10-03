@@ -7,51 +7,45 @@
     android:layout_height="match_parent"
     tools:context=".DetailFragment">
 
+    <ImageView
+        android:id="@+id/avatarView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/firstNameView"
+        android:layout_width="210dp"
+        android:layout_height="53dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/avatarView"
+        app:layout_constraintTop_toTopOf="@+id/avatarView"
+        tools:text="first name" />
+
     <TextView
         android:id="@+id/emailView"
-        android:layout_width="296dp"
-        android:layout_height="57dp"
-        android:layout_marginBottom="88dp"
+        android:layout_width="211dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="20dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/lastNameView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/avatarView"
         app:layout_constraintTop_toBottomOf="@+id/lastNameView"
         tools:text="email" />
 
     <TextView
         android:id="@+id/lastNameView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="110dp"
-        android:layout_marginBottom="42dp"
+        android:layout_width="210dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="20dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/emailView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/avatarView"
         app:layout_constraintTop_toBottomOf="@+id/firstNameView"
         tools:text="last name" />
-
-    <TextView
-        android:id="@+id/firstNameView"
-        android:layout_width="298dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="73dp"
-        android:layout_marginBottom="29dp"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/lastNameView"
-        app:layout_constraintStart_toStartOf="@+id/lastNameView"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="first name" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="71dp"
-        android:layout_marginEnd="126dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/lastNameView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

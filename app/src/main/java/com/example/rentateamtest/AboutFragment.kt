@@ -6,28 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import com.example.rentateamtest.databinding.AboutFragmentBinding
+import com.example.rentateamtest.databinding.HomeFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AboutFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AboutFragment()
-    }
-
-    private lateinit var viewModel: AboutViewModel
+    private val viewModel: AboutViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.about_fragment, container, false)
-    }
+        //return inflater.inflate(R.layout.about_fragment, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AboutViewModel::class.java)
-        // TODO: Use the ViewModel
+        val binding: AboutFragmentBinding = DataBindingUtil
+            .inflate(inflater, R.layout.about_fragment,container,false)
+        binding.viewModel=viewModel
+        return binding.root
     }
-
 }

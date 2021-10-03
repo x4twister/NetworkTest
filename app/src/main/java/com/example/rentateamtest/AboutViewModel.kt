@@ -6,5 +6,5 @@ import androidx.lifecycle.ViewModel
 
 //@HiltViewModel @Inject
 class AboutViewModel constructor(): ViewModel() {
-    // TODO: Implement the ViewModel
+    val aboutText="Тестовое задание для RentaTeam"
 }
