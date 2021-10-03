@@ -24,9 +24,6 @@ class DetailViewModel @AssistedInject constructor (
         fun create(handle: SavedStateHandle, userId: String): DetailViewModel
     }
 
-    /*private val _user=MutableLiveData<User>()
-    val user : LiveData<User> = _user*/
-
     val user=usersRepository.getUser(userId)
 }
 

@@ -27,7 +27,7 @@ object Modules {
             .baseUrl("https://reqres.in/api/")
             .build()
 
-        return retrofit.create(WebService::class.java);
+        return retrofit.create(WebService::class.java)
     }
 
     @Provides

@@ -7,8 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.rentateamtest.helpers.ViewModelFactory
+import com.example.rentateamtest.repository.Status
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,32 +42,37 @@ class DetailFragment : Fragment() {
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        /*viewModel.user.observe(viewLifecycleOwner) {
-            viewModel.user.value?.let {
-                firstNameView.text=it.firstName
-                lastNameView.text=it.lastName
-                emailView.text=it.id.toString()
-            }
-        }*/
 
-        viewModel.user
+        viewModel.user.let { (status,result) ->
+            status.observe(viewLifecycleOwner) {
+                indeterminateBar.isVisible=it.equals(Status.LOADING)
+
+                if (it== Status.ERROR)
+                    showError("Network error")
+            }
+
+            result
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                Log.d("Result", "$result")
-                firstNameView.text=result.firstName
-                lastNameView.text=result.lastName
-                emailView.text=result.email
+            .subscribe ({ value ->
+                lifecycleScope.launchWhenStarted{
+                    firstNameView.text=value.firstName
+                    lastNameView.text=value.lastName
+                    emailView.text=value.email
 
-                Picasso.get()
-                    .load(result.avatar)
-                    .fit()
-                    .into(avatarView)
+                    Picasso.get()
+                        .load(value.avatar)
+                        .fit()
+                        .into(avatarView)
+                }
             }, { error ->
-                Log.d("Result", "FAIL!")
                 error.printStackTrace()
+                showError("Something Went Wrong")
             })
+        }
+    }
 
+    private fun showError(text: String) {
+        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
     }
 }
