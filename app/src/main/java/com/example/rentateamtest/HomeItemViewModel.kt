@@ -3,11 +3,14 @@ package com.example.rentateamtest
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.BaseObservable
-import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.example.rentateamtest.pojo.User
 
-class HomeItemViewModel : BaseObservable() {
+class HomeItemViewModel(private val callback: Callback) : BaseObservable() {
+
+    interface Callback {
+        fun onUserClick(id: Long)
+    }
 
     val value
         get() = "${user!!.firstName} ${user!!.lastName}"
@@ -19,10 +22,6 @@ class HomeItemViewModel : BaseObservable() {
         }
 
     fun onClick(view: View){
-        val args = Bundle().apply {
-            // TODO
-            putString("key", user!!.id.toString())
-        }
-        view.findNavController().navigate(R.id.action_homeFragment_to_detailFragment,args)
+        callback.onUserClick(user!!.id)
     }
 }

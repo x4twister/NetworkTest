@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rentateamtest.databinding.HomeFragmentBinding
@@ -26,9 +27,6 @@ import kotlinx.android.synthetic.main.home_fragment.*
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-
-    companion object {
-    }
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -78,17 +76,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun showError(text: String) {
-        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, text, Snackbar.LENGTH_SHORT).show()
     }
 
     inner class HomeFragmentHolder(private val binding: HomeItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(user: User) {
             binding.viewModel!!.user=user
+            binding.executePendingBindings()
         }
 
         init {
-            binding.viewModel=HomeItemViewModel()
+            binding.viewModel=HomeItemViewModel(object: HomeItemViewModel.Callback{
+                override fun onUserClick(id: Long) {
+                    val args = Bundle().apply {
+                        putString(DetailFragment.ARG_USER_ID, id.toString())
+                    }
+                    binding.root.findNavController().navigate(R.id.action_homeFragment_to_detailFragment,args)
+                }
+            })
         }
     }
 
