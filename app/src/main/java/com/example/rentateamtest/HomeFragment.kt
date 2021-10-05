@@ -20,6 +20,7 @@ import com.example.rentateamtest.repository.Status
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.internal.operators.observable.ObservableReplay.observeOn
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.home_fragment.*
 
@@ -55,29 +56,25 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.users.let { (status,result) ->
-            status.observe(viewLifecycleOwner) {
-                indeterminateBar.isVisible=it.equals(Status.LOADING)
-
-                if (it==Status.ERROR)
-                    showError("Network error")
-            }
-
-            result
+        viewModel.users
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({ value ->
+            .subscribe ({ either ->
                 lifecycleScope.launchWhenStarted {
-                    homeFragmentAdapter.apply {
-                        setUsers(value)
-                        notifyDataSetChanged()
+                    indeterminateBar.isVisible = either.left == Status.LOADING
+
+                    either.right?.let {
+                        homeFragmentAdapter.apply {
+                            setUsers(it)
+                            notifyDataSetChanged()
+                        }
+                    } ?: run {
+                        showError("${either.left}")
                     }
                 }
             }, { error ->
                 error.printStackTrace()
-                showError("Something Went Wrong")
             })
-        }
     }
 
     private fun showError(text: String) {

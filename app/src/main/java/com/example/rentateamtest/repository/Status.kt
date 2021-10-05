@@ -1,7 +1,8 @@
 package com.example.rentateamtest.repository
 
 enum class Status {
-    IDLE,
     LOADING,
-    ERROR
+    LOADED,
+    NETWORK_ERROR,
+    APPLICATION_ERROR
 }

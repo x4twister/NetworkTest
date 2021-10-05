@@ -19,6 +19,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.detail_fragment.*
+import kotlinx.android.synthetic.main.detail_fragment.indeterminateBar
+import kotlinx.android.synthetic.main.home_fragment.*
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
@@ -43,33 +45,29 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.user.let { (status,result) ->
-            status.observe(viewLifecycleOwner) {
-                indeterminateBar.isVisible=it.equals(Status.LOADING)
-
-                if (it== Status.ERROR)
-                    showError("Network error")
-            }
-
-            result
+        viewModel.user
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({ value ->
+            .subscribe ({ either ->
                 lifecycleScope.launchWhenStarted{
-                    firstNameView.text=value.firstName
-                    lastNameView.text=value.lastName
-                    emailView.text=value.email
+                    indeterminateBar.isVisible= either.left == Status.LOADING
 
-                    Picasso.get()
-                        .load(value.avatar)
-                        .fit()
-                        .into(avatarView)
+                    either.right?.let {
+                        firstNameView.text=it.firstName
+                        lastNameView.text=it.lastName
+                        emailView.text=it.email
+
+                        Picasso.get()
+                            .load(it.avatar)
+                            .fit()
+                            .into(avatarView)
+                    }?: run {
+                        showError("${either.left}")
+                    }
                 }
             }, { error ->
                 error.printStackTrace()
-                showError("Something Went Wrong")
             })
-        }
     }
 
     private fun showError(text: String) {
