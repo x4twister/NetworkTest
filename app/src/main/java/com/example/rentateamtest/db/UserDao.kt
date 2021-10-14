@@ -6,15 +6,16 @@ import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import com.example.rentateamtest.pojo.User
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
 
     @Query("SELECT * FROM user LIMIT :count OFFSET :pos")
-    fun load(count: Long, pos: Long): Flowable<List<User>>
+    fun load(count: Long, pos: Long): Flow<List<User>>
 
     @Query("SELECT * FROM user WHERE id = :id")
-    fun loadById(id: Long): Flowable<User>
+    fun loadById(id: Long): Flow<User>
 
     @Insert(onConflict=REPLACE)
     fun save(user: User)

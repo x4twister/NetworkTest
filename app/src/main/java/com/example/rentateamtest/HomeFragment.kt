@@ -24,6 +24,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.operators.observable.ObservableReplay.observeOn
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -54,11 +56,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.users
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ either ->
-                lifecycleScope.launchWhenStarted {
+        lifecycleScope.launchWhenStarted {
+            viewModel.users
+                .catch { error ->
+                    error.printStackTrace()
+                }
+                .collect { either ->
                     indeterminateBar.isVisible = either.left == Status.LOADING
 
                     either.right?.let {
@@ -69,10 +72,8 @@ class HomeFragment : Fragment() {
                     } ?: run {
                         showError("${either.left}")
                     }
-                }
-            }, { error ->
-                error.printStackTrace()
-            })
+            }
+        }
     }
 
     private fun showError(text: String) {

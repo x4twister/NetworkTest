@@ -19,6 +19,8 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.detail_fragment.*
 import kotlinx.android.synthetic.main.detail_fragment.indeterminateBar
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class DetailFragment : Fragment() {
@@ -43,11 +45,12 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.user
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ either ->
-                lifecycleScope.launchWhenStarted{
+        lifecycleScope.launchWhenStarted {
+            viewModel.user
+                .catch { error ->
+                    error.printStackTrace()
+                }
+                .collect { either ->
                     indeterminateBar.isVisible= either.left == Status.LOADING
 
                     either.right?.let {
@@ -62,10 +65,8 @@ class DetailFragment : Fragment() {
                     }?: run {
                         showError("${either.left}")
                     }
-                }
-            }, { error ->
-                error.printStackTrace()
-            })
+            }
+        }
     }
 
     private fun showError(text: String) {
